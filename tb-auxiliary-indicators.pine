@@ -1,5 +1,5 @@
 // @version=5
-// Last update: 28-ene-2025 (by N)
+// Last update: 28-ene-2025
 
 indicator(title="TB: Auxiliary-indicators", shorttitle="TB-A", format=format.price, precision=2)
 
