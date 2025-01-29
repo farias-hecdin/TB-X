@@ -1,7 +1,7 @@
 // @version=5
 // Last update: 28-ene-2025 (by N)
 
-indicator(title="TVI Down", shorttitle="TVI X", format=format.price, precision=2)
+indicator(title="TB: Auxiliary-indicators", shorttitle="TB-A", format=format.price, precision=2)
 
 
 // RSI (Relative Strength Index) ----------------------------------------------
