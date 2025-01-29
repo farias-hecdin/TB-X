@@ -1,7 +1,7 @@
 // @version=5
 // Last update: 28-ene-2025 (by N)
 
-indicator(title="TVI Top", shorttitle="TVI Y", overlay=true)
+indicator(title="TB: Main-indicators", shorttitle="TB-M", overlay=true)
 
 
 // Weekend -----------------------------------------------------------------
