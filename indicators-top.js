@@ -1,15 +1,12 @@
 // @version=5
-// Last update: 13-dic-2024 (by N)
+// Last update: 28-ene-2025 (by N)
 
-indicator(title="TVI Y", shorttitle="TVI Y", overlay=true)
+indicator(title="TVI Top", shorttitle="TVI Y", overlay=true)
 
-// * EMA
-// * HMA
-// * Supertrend
-// * Ichimoku
-// * S/R
-// * ATR
-// * Donchian channels
+
+// Weekend -----------------------------------------------------------------
+
+bgcolor(dayofweek == 7 ? #7f7fff : dayofweek == 1 ? #EDDC01 : na)
 
 
 // EMA (Moving Average Exponential) ----------------------------------------

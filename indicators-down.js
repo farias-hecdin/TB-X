@@ -1,10 +1,8 @@
 // @version=5
-// Last update: 13-dic-2024 (by N)
+// Last update: 28-ene-2025 (by N)
 
-indicator(title="TVI X", shorttitle="TVI X", format=format.price, precision=2)
+indicator(title="TVI Down", shorttitle="TVI X", format=format.price, precision=2)
 
-// * RSI
-// * Stochastic
 
 // RSI (Relative Strength Index) ----------------------------------------------
 
@@ -20,6 +18,7 @@ band0  = hline(20, "RSI - lower", color=color.new(color.blue, 0), linestyle=hlin
 banda1 = hline(50, "RSI - medium", color=color.new(color.white, 0))
 banda3 = hline(55, "RSI - band", color=color.new(color.orange, 0), linestyle=hline.style_dotted)
 banda4 = hline(45, "RSI - band", color=color.new(color.blue, 0), linestyle=hline.style_dotted)
+
 
 // Stochastic -----------------------------------------------------------------
 
