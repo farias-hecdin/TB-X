@@ -1,19 +1,42 @@
 // @version=5
-// Last update: 28-ene-2025
+// Last update: 08-feb-2025
 
-indicator(title="TB: Main-indicators", shorttitle="TB-M", overlay=true)
+indicator(title="TB: Main-indicators", shorttitle="TB-M", overlay=true, scale = scale.none, max_lines_count=500)
+
+
+// TS (Time separator ------------------------------------------------------
+
+drawVLine(showLine, openHour, openMinute, lineColor) =>
+    isHour = hour == openHour
+    isMinute = minute == openMinute
+    if (showLine and isHour and isMinute)
+        line.new(bar_index, low - ta.tr, bar_index, high + ta.tr, xloc.bar_index, extend.both, lineColor, line.style_dashed, 1)
+
+// TS 1
+showLine1 = input.bool(defval = true, title = "Separator 1", group="Time separator")
+openHour1 = input.int(defval = 23, title = "Calibrate hour (0-23)", minval = 0, maxval = 23, group="Time separator")
+openMinute1 = input.int(defval = 0, title = "Calibrate minute (0-30)", minval = 0, maxval = 30, group="Time separator")
+lineColor1 = input.color(defval = color.gray, title = "Color", group="Time separator")
+drawVLine(showLine1, openHour1, openMinute1, lineColor1)
+
+// TS 2
+showLine2 = input.bool(defval = true, title = "Separator 2", group="Time separator")
+openHour2 = input.int(defval = 15, title = "Calibrate hour (0-23)", minval = 0, maxval = 23, group="Time separator")
+openMinute2 = input.int(defval = 0, title = "Calibrate minute (0-30)", minval = 0, maxval = 30, group="Time separator")
+lineColor2 = input.color(defval = color.gray, title = "Color", group="Time separator")
+drawVLine(showLine2, openHour2, openMinute2, lineColor2)
 
 
 // Weekend -----------------------------------------------------------------
 
-bgcolor(dayofweek == 7 ? #7f7fff : dayofweek == 1 ? #EDDC01 : na)
+bgcolor(dayofweek == 7 ? #7f7fff : dayofweek == 1 ? #EDDC01 : na, title="Weekend")
 
 
 // EMA (Moving Average Exponential) ----------------------------------------
 
 // EMA 1
-lenEma_NjS = input.int(defval=50, minval=0, title="Length", group="EMA")
-srcEma_NjS = input.source(close, title="Source", group="EMA")
+lenEma_NjS = input.int(defval=50, minval=0, title="Length", group="EMA 1")
+srcEma_NjS = input.source(close, title="Source", group="EMA 1")
 ema_NjS = ta.ema(srcEma_NjS, lenEma_NjS)
 
 plot(ema_NjS, color=color.white, linewidth=1, title="EMA 1")
@@ -28,8 +51,8 @@ plot(ema_4NW, color=color.white, linewidth=1, title="EMA 2")
 
 // S/R (Support and Resistance) --------------------------------------------
 
-left = input.int(defval=3, title="Left", group="S/R")
-right = input.int(defval=3, title="Right", group="S/R")
+left = input.int(defval=3, title="Left bars", group="S/R")
+right = input.int(defval=3, title="Right bars", group="S/R")
 hih = ta.pivothigh(high, left, right)
 lol = ta.pivotlow(low, left, right)
 top = ta.valuewhen(hih, high[right], 0)
@@ -65,9 +88,10 @@ plot(longStopLoss, color=color.new(color.black, 0), style=plot.style_cross, titl
 
 // HMA (Hull Moving Average) -----------------------------------------------
 
-hmaLength = input.int(title="length", defval=25, group="HMA")
-tf = input.timeframe(title="timeframe", defval="", group="HMA")
-source = input(close, title="source", group="HMA")
+hmaLength = input.int(title="Length", defval=25, group="HMA")
+tf = input.timeframe(title="Timeframe", defval="", group="HMA")
+source = input(close, title="Source", group="HMA")
+
 hullma = ta.wma(2 * ta.wma(source, hmaLength/2) - ta.wma(source, hmaLength), math.floor(math.sqrt(hmaLength)))
 hma = request.security(syminfo.tickerid, timeframe=tf, expression=hullma, gaps=barmerge.gaps_off, lookahead=barmerge.lookahead_off)
 
@@ -81,39 +105,44 @@ multiplier = input.float(title="ATR multiplier", step=0.1, defval=1.7, group="Su
 changeATR = input.bool(title="Change ATR calculation method", defval=false, group="Supertrend")
 src = input.source(hl2, title="Source", group="Supertrend")
 
-atr2 = ta.sma(ta.tr, periods)
-atr = changeATR ? ta.atr(periods) : atr2
+atr = changeATR ? ta.atr(periods) : ta.sma(ta.tr, periods)
+
 up = src - (multiplier * atr)
-up1 = nz(up[1], up)
-up := close[1] > up1 ? math.max(up, up1) : up
 dn = src + (multiplier * atr)
-dn1 = nz(dn[1], dn)
-dn := close[1] < dn1 ? math.min(dn, dn1) : dn
+up := close[1] > nz(up[1], up) ? math.max(up, nz(up[1], up)) : up
+dn := close[1] < nz(dn[1], dn) ? math.min(dn, nz(dn[1], dn)) : dn
+
 trend = 1
-trend := nz(trend[1], trend)
-trend := trend == -1 and close > dn1 ? 1 : trend == 1 and close < up1 ? -1 : trend
+trend := nz(trend[1], 1)
+trend := trend == -1 and close > nz(dn[1], dn) ? 1 : trend == 1 and close < nz(up[1], up) ? -1 : trend
 
 upPlot = plot(trend == 1 ? up : na, title="ST - upTrend", style=plot.style_linebr, linewidth=2, color=color.new(color.blue, 0))
-dnPlot = plot(trend == 1 ? na : dn, title="ST - downTrend", style=plot.style_linebr, linewidth=2, color=color.new(color.rgb(42, 46, 57, 0), 0))
+dnPlot = plot(trend == -1 ? dn : na, title="ST - downTrend", style=plot.style_linebr, linewidth=2, color=color.new(color.rgb(42, 46, 57, 0), 0))
+
 
 // ICH (Ichimoku cloud) ----------------------------------------------------
 
-conversionPeriods = input.int(defval=10, minval=1, title="Conversion line, (kijun-sen)", group="Ichimoku")
-basePeriods = input.int(defval=30, minval=1, title="Base line, (kijun-sen)", group="Ichimoku")
-laggingSpan2Periods = input.int(defval=60, minval=1, title="Leading span B, (senkou span B)", group="Ichimoku")
+// Parámetros de entrada
+conversionPeriods = input.int(defval=10, minval=1, title="Conversion line (kijun-sen)", group="Ichimoku")
+basePeriods = input.int(defval=30, minval=1, title="Base line (kijun-sen)", group="Ichimoku")
+laggingSpan2Periods = input.int(defval=60, minval=1, title="Leading span B (senkou span B)", group="Ichimoku")
 displacement = input.int(defval=30, minval=1, title="Displacement", group="Ichimoku")
 
-donchian(len) => math.avg(ta.lowest(len), ta.highest(len))
+donchian(len) =>
+    math.avg(ta.lowest(len), ta.highest(len))
+
 conversionLine = donchian(conversionPeriods)
 baseLine = donchian(basePeriods)
 leadLine1 = math.avg(conversionLine, baseLine)
 leadLine2 = donchian(laggingSpan2Periods)
 
-plot(conversionLine, color=color.new(color.yellow, 0), title="ICH - conversion line")
-plot(baseLine, color=color.new(color.red, 0), title="ICH - base line")
-plot(close, color=color.new(color.navy, 0), title="ICH - lagging span", offset=-displacement + 1, linewidth=2)
-plot(ta.cross(conversionLine, baseLine) ? conversionLine : na, color=color.new(color.white, 0), style=plot.style_cross, linewidth=4, title="ICH - cross")
-p1 = plot(leadLine1, offset=displacement - 1, color=color.new(color.green, 0), title="ICH - Leading span A")
-p2 = plot(leadLine2, offset=displacement - 1, color=color.new(color.red, 0), title="ICH - Leading span B")
-fill(p1, p2, color=leadLine1 > leadLine2 ? color.rgb(0, 77, 64, 50) : color.rgb(183, 28, 28, 50), title="ICH - kumo")
+plot(conversionLine, color=color.yellow, title="ICH - conversion line")
+plot(baseLine, color=color.red, title="ICH - base line")
+plot(close, color=color.navy, title="ICH - lagging span", offset=-displacement + 1, linewidth=2)
+plot(ta.cross(conversionLine, baseLine) ? conversionLine : na, color=color.white, style=plot.style_cross, linewidth=4, title="ICH - cross")
+
+p1 = plot(leadLine1, offset=displacement - 1, color=color.green, title="ICH - leading span A")
+p2 = plot(leadLine2, offset=displacement - 1, color=color.red, title="ICH - leading span B")
+
+fill(p1, p2, color=leadLine1 > leadLine2 ? color.new(color.green, 50) : color.new(color.red, 50), title="ICH - kumo")
 

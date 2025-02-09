@@ -10,16 +10,17 @@ Los indicadores se dividen en dos categorías: aquellos que se superponen al gr�
 
 Estos indicadores se visualizan directamente sobre el gráfico de precios:
 
-| Nombre          | Descripción                                                                    |
-|-----------------|--------------------------------------------------------------------------------|
-| EMA x2          | Dos Medias Móviles Exponenciales (EMA) configurables.                             |
-| ATR             | Rango Medio Verdadero (Average True Range). Mide la volatilidad del activo.     |
-| DC              | Canales de Donchian (Donchian Channels). Representa el máximo y mínimo de un período. |
-| S/R             | Soporte y Resistencia (Support and Resistance). Dibuja niveles clave de S/R.   |
-| HMA             | Media Móvil de Hull (Hull Moving Average). Suaviza la acción del precio.        |
-| ST              | Supertrend. Sigue la tendencia principal del precio.                            |
-| ICH             | Nube de Ichimoku (Ichimoku Cloud). Indicador completo de tendencia y momentum. |
-| Weekend         | Resalta los fines de semana en el gráfico.                                     |
+| Nombre             | Descripción                                                                    |
+|--------------------|--------------------------------------------------------------------------------|
+| EMA x2             | Dos Medias Móviles Exponenciales (EMA) configurables.                             |
+| ATR                | Rango Medio Verdadero (Average True Range). Mide la volatilidad del activo.     |
+| DC                 | Canales de Donchian (Donchian Channels). Representa el máximo y mínimo de un período. |
+| S/R                | Soporte y Resistencia (Support and Resistance). Dibuja niveles clave de S/R.   |
+| HMA                | Media Móvil de Hull (Hull Moving Average). Suaviza la acción del precio.        |
+| ST                 | Supertrend. Sigue la tendencia principal del precio.                            |
+| ICH                | Nube de Ichimoku (Ichimoku Cloud). Indicador completo de tendencia y momentum. |
+| Weekend            | Resalta los fines de semana en el gráfico.                                     |
+| Time separator x2  | Agrega una línea vertical en el gráfico para indicad una hora específica. |
 
 ### Panel auxiliar
 
