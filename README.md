@@ -19,7 +19,7 @@ Estos indicadores se visualizan directamente sobre el gráfico de precios:
 | HMA                | Media Móvil de Hull (Hull Moving Average). Suaviza la acción del precio.        |
 | ST                 | Supertrend. Sigue la tendencia principal del precio.                            |
 | ICH                | Nube de Ichimoku (Ichimoku Cloud). Indicador completo de tendencia y momentum. |
-| Weekend            | Resalta los fines de semana en el gráfico.                                     |
+| DayOfWeek          | Resalta los dias de la semana en el gráfico.                                     |
 | Time separator x2  | Agrega una línea vertical en el gráfico para indicad una hora específica. |
 
 ### Panel auxiliar

@@ -14,39 +14,47 @@ drawVLine(showLine, openHour, openMinute, lineColor) =>
 
 // TS 1
 showLine1 = input.bool(defval = true, title = "Separator 1", group="Time separator")
-openHour1 = input.int(defval = 23, title = "Calibrate hour (0-23)", minval = 0, maxval = 23, group="Time separator")
-openMinute1 = input.int(defval = 0, title = "Calibrate minute (0-30)", minval = 0, maxval = 30, group="Time separator")
-lineColor1 = input.color(defval = color.gray, title = "Color", group="Time separator")
+openHour1 = input.int(defval = 23, title = "Hour: 0-23", minval = 0, maxval = 23, group="Time separator")
+openMinute1 = input.int(defval = 0, title = "Minute: 0-30", minval = 0, maxval = 30, group="Time separator")
+lineColor1 = input.color(defval = color.new(#00A5E3, 0), title = "Color", group="Time separator")
 drawVLine(showLine1, openHour1, openMinute1, lineColor1)
 
 // TS 2
 showLine2 = input.bool(defval = true, title = "Separator 2", group="Time separator")
-openHour2 = input.int(defval = 15, title = "Calibrate hour (0-23)", minval = 0, maxval = 23, group="Time separator")
-openMinute2 = input.int(defval = 0, title = "Calibrate minute (0-30)", minval = 0, maxval = 30, group="Time separator")
-lineColor2 = input.color(defval = color.gray, title = "Color", group="Time separator")
+openHour2 = input.int(defval = 15, title = "Hour: 0-23", minval = 0, maxval = 23, group="Time separator")
+openMinute2 = input.int(defval = 0, title = "Minute: 0-30", minval = 0, maxval = 30, group="Time separator")
+lineColor2 = input.color(defval = color.new(#00A5E3, 0), title = "Color", group="Time separator")
 drawVLine(showLine2, openHour2, openMinute2, lineColor2)
 
 
-// Weekend -----------------------------------------------------------------
+// DayOfWeek -----------------------------------------------------------------
 
-bgcolor(dayofweek == 7 ? #7f7fff : dayofweek == 1 ? #EDDC01 : na, title="Weekend")
+color_sunday = color.new(#8DD7BF, 95)
+color_monday = color.new(#FF5768, 95)
+color_tuesday = color.new(#FFD700, 95)
+color_wednesday = color.new(#8A2BE2, 95)
+color_thursday = color.new(#FF6347, 95)
+color_friday = color.new(#7CFC00, 95)
+color_saturday = color.new(#1E90FF, 95)
+
+bgcolor(dayofweek == 7 ? color_sunday :dayofweek == 1 ? color_monday : dayofweek == 2 ? color_tuesday : dayofweek == 3 ? color_wednesday : dayofweek == 4 ? color_thursday : dayofweek == 5 ? color_friday : dayofweek == 6 ? color_saturday : na,title="Days of the Week")
 
 
 // EMA (Moving Average Exponential) ----------------------------------------
 
 // EMA 1
-lenEma_NjS = input.int(defval=50, minval=0, title="Length", group="EMA 1")
+lenEma_NjS = input.int(defval=100, minval=0, title="Length", group="EMA 1")
 srcEma_NjS = input.source(close, title="Source", group="EMA 1")
 ema_NjS = ta.ema(srcEma_NjS, lenEma_NjS)
 
-plot(ema_NjS, color=color.white, linewidth=1, title="EMA 1")
+plot(ema_NjS, color=color.new(#ffffff, 0), linewidth=1, title="EMA 1")
 
 // EMA 2
-lenEma_4NW = input.int(defval=100, minval=0, title="Length", group="EMA 2")
+lenEma_4NW = input.int(defval=50, minval=0, title="Length", group="EMA 2")
 srcEma_4NW = input.source(close, title="Source", group="EMA 2")
 ema_4NW = ta.ema(srcEma_4NW, lenEma_4NW)
 
-plot(ema_4NW, color=color.white, linewidth=1, title="EMA 2")
+plot(ema_4NW, color=color.new(#ffffff, 50), linewidth=1, title="EMA 2")
 
 
 // S/R (Support and Resistance) --------------------------------------------
@@ -58,8 +66,8 @@ lol = ta.pivotlow(low, left, right)
 top = ta.valuewhen(hih, high[right], 0)
 bot = ta.valuewhen(lol, low[right], 0)
 
-plot(top, color=top != top[1] ? na : color.new(color.yellow, 0), offset=-left, title="S/R - resistance")
-plot(bot, color=bot != bot[1] ? na : color.new(color.yellow, 0), offset=-left, title="S/R - support")
+plot(top, color=top != top[1] ? na : color.new(#0561f5, 0), offset=-left, title="S/R - resistance")
+plot(bot, color=bot != bot[1] ? na : color.new(#0561f5, 0), offset=-left, title="S/R - support")
 
 
 // DC (Donchian Channels) --------------------------------------------------
@@ -95,7 +103,7 @@ source = input(close, title="Source", group="HMA")
 hullma = ta.wma(2 * ta.wma(source, hmaLength/2) - ta.wma(source, hmaLength), math.floor(math.sqrt(hmaLength)))
 hma = request.security(syminfo.tickerid, timeframe=tf, expression=hullma, gaps=barmerge.gaps_off, lookahead=barmerge.lookahead_off)
 
-plot(hma, title="HMA", color=color.yellow, linewidth=2)
+plot(hma, title="HMA", color=color.orange, linewidth=1)
 
 
 // ST (Supertrend) ---------------------------------------------------------
